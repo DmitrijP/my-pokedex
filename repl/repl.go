@@ -31,19 +31,7 @@ func StartRepl() {
 }
 
 func CleanCommand(input string) []string {
-	res := []string{}
-	input = strings.TrimSpace(input)
-	if input == "" {
-		return res
-	}
-	parts := strings.Split(input, " ")
-	for _, p := range parts {
-		if p == " " || p == "" {
-			continue
-		}
-		p = strings.TrimSpace(p)
-		p = strings.ToLower(p)
-		res = append(res, p)
-	}
-	return res
+	inputLower := strings.ToLower(input)
+	inputFields := strings.Fields(inputLower)
+	return inputFields
 }
