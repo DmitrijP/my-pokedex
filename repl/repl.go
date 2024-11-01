@@ -4,34 +4,32 @@ import (
 	"bufio"
 	"fmt"
 	"os"
-	"strings"
 
 	"github.com/DmitrijP/my-pokedex/commands"
 )
 
 func StartRepl() {
-	fmt.Print("Pokedex > ")
 	scanner := bufio.NewScanner(os.Stdin)
 	cmdMap := commands.GetCommandMap()
-	for scanner.Scan() {
-		token := scanner.Text()
-		if val, ok := cmdMap[token]; ok {
-			err := val.Callback()
-			if err != nil {
-				fmt.Printf("Error %v", err)
-			}
-			fmt.Print("Pokedex > ")
+	for {
+		fmt.Print("Pokedex > ")
+		scanner.Scan()
+		if scanner.Err() != nil {
+			fmt.Printf("Scanner error encountered: %v\n", scanner.Err())
 			continue
 		}
-		fmt.Printf("Unknown token: %s", token)
+		token := scanner.Text()
+		commands := commands.CleanCommand(token)
+		if len(commands) == 0 {
+			continue
+		}
+		if val, ok := cmdMap[commands[0]]; ok {
+			err := val.Callback()
+			if err != nil {
+				fmt.Printf("Error %v\n", err)
+			}
+		} else {
+			fmt.Printf("Unknown token: %s\n", token)
+		}
 	}
-	if scanner.Err() != nil {
-		fmt.Printf("Scanner error: %v", scanner.Err())
-	}
-}
-
-func CleanCommand(input string) []string {
-	inputLower := strings.ToLower(input)
-	inputFields := strings.Fields(inputLower)
-	return inputFields
 }
