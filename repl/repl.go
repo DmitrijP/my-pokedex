@@ -28,3 +28,7 @@ func StartRepl() {
 		fmt.Printf("Scanner error: %v", scanner.Err())
 	}
 }
+
+func CleanCommand(text string) []string {
+	return append(make([]string, 0), text)
+}
