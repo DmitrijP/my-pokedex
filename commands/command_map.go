@@ -2,26 +2,22 @@ package commands
 
 import (
 	"fmt"
-	"io"
-	"log"
-	"net/http"
+
+	"github.com/DmitrijP/my-pokedex/client"
 )
 
-func commandMap() error {
+func commandMap(cfg *Config) error {
+	url := ""
+	if cfg.NextLocationsUrl != nil {
+		url = *cfg.NextLocationsUrl
+	}
+	locations := client.RequestLocations(url)
 
-	res, err := http.Get("http://www.google.com/robots.txt")
-	if err != nil {
-		log.Fatal(err)
+	cfg.PreviousLocationsUrl = locations.Previous
+	cfg.NextLocationsUrl = locations.Next
+	for _, l := range locations.Results {
+		fmt.Println(l.Name)
 	}
-	body, err := io.ReadAll(res.Body)
-	res.Body.Close()
-	if res.StatusCode > 299 {
-		log.Fatalf("Response failed with status code: %d and\nbody: %s\n", res.StatusCode, body)
-	}
-	if err != nil {
-		log.Fatal(err)
-	}
-	fmt.Printf("%s", body)
 
 	return nil
 }

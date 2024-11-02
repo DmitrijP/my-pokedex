@@ -8,7 +8,7 @@ import (
 	"github.com/DmitrijP/my-pokedex/commands"
 )
 
-func StartRepl() {
+func StartRepl(cfg *commands.Config) {
 	scanner := bufio.NewScanner(os.Stdin)
 	cmdMap := commands.GetCommandMap()
 	for {
@@ -24,7 +24,7 @@ func StartRepl() {
 			continue
 		}
 		if val, ok := cmdMap[commands[0]]; ok {
-			err := val.Callback()
+			err := val.Callback(cfg)
 			if err != nil {
 				fmt.Printf("Error %v\n", err)
 			}

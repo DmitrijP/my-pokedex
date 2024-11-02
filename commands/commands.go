@@ -1,11 +1,18 @@
 package commands
 
-import "strings"
+import (
+	"strings"
+)
+
+type Config struct {
+	PreviousLocationsUrl *string
+	NextLocationsUrl     *string
+}
 
 type CliCommand struct {
 	Name        string
 	Description string
-	Callback    func() error
+	Callback    func(cfg *Config) error
 }
 
 func GetCommandMap() map[string]CliCommand {
@@ -25,8 +32,8 @@ func GetCommandMap() map[string]CliCommand {
 			Description: "Map the world",
 			Callback:    commandMap,
 		},
-		"mapB": {
-			Name:        "mapB",
+		"mapb": {
+			Name:        "mapb",
 			Description: "Map the world back",
 			Callback:    commandMapB,
 		},
