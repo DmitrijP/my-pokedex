@@ -24,6 +24,12 @@ func NewCache(interval time.Duration) Cache {
 	}
 }
 
+func (c *Cache) Reset() {
+	c.mu.Lock()
+	defer c.mu.Unlock()
+	c.entries = make(map[string]CacheEntry)
+}
+
 func (c *Cache) Add(key string, val []byte) {
 	c.mu.Lock()
 	defer c.mu.Unlock()

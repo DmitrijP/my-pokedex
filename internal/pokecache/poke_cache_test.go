@@ -200,7 +200,53 @@ func Test_ReapLoop_ValueAndCreatedAtExists(t *testing.T) {
 }
 
 func Test_Add_ConcurrentAccess(t *testing.T) {
+	expectedDuration := time.Microsecond * 10
+	cache := NewCache(expectedDuration)
+	numEntries := 100
 
+	var wg sync.WaitGroup
+
+	for i := 0; i < numEntries; i++ {
+		wg.Add(1)
+		go func(i int) {
+			defer wg.Done()
+
+			time.Sleep(time.Microsecond)
+			cache.Add(fmt.Sprintf("key_%d", i), []byte(fmt.Sprintf("vaulue_%d", i)))
+		}(i)
+	}
+
+	wg.Wait()
+	if len(cache.entries) != 100 {
+		t.Fatalf("Expected length: %v but it was %v\n", numEntries, len(cache.entries))
+	}
+}
+
+func Test_AddAndReset_ConcurrentAccess(t *testing.T) {
+	expectedDuration := time.Microsecond * 10
+	cache := NewCache(expectedDuration)
+	numEntries := 100
+	var wg sync.WaitGroup
+
+	for i := 0; i < numEntries; i++ {
+		wg.Add(1)
+		go func(i int) {
+			defer wg.Done()
+			time.Sleep(time.Microsecond)
+			cache.Add(fmt.Sprintf("key_%d", i), []byte(fmt.Sprintf("value_%d", i)))
+		}(i)
+	}
+
+	wg.Wait()
+
+	if len(cache.entries) != numEntries {
+		t.Fatalf("Expected length: %v but it was %v\n", numEntries, len(cache.entries))
+	}
+
+	cache.Reset()
+	if len(cache.entries) != 0 {
+		t.Fatalf("Expected length: 0 but it was %v\n", len(cache.entries))
+	}
 }
 
 func Test_ReapLoop_ConcurrentAccess(t *testing.T) {
