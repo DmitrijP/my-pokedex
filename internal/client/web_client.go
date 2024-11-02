@@ -46,3 +46,26 @@ func RequestLocations(overwriteUrl string) LocationsResponse {
 	}
 	return locations
 }
+
+func RequestPokemonOfLocation(location string) AreResponse {
+	url := baseURL + "location-area/" + location
+	res, err := http.Get(url)
+	if err != nil {
+		log.Fatal(err)
+	}
+	body, err := io.ReadAll(res.Body)
+	res.Body.Close()
+	if res.StatusCode > 299 {
+		log.Fatalf("Response failed with status code: %d and\nbody: %s\n", res.StatusCode, body)
+	}
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	locations := AreResponse{}
+	err = json.Unmarshal(body, &locations)
+	if err != nil {
+		log.Fatal(err)
+	}
+	return locations
+}

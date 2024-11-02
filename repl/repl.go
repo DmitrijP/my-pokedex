@@ -24,7 +24,11 @@ func StartRepl(cfg *commands.Config) {
 			continue
 		}
 		if val, ok := cmdMap[commands[0]]; ok {
-			err := val.Callback(cfg)
+			param := ""
+			if len(commands) == 2 {
+				param = commands[1]
+			}
+			err := val.Callback(cfg, param)
 			if err != nil {
 				fmt.Printf("Error %v\n", err)
 			}

@@ -15,7 +15,7 @@ type Config struct {
 type CliCommand struct {
 	Name        string
 	Description string
-	Callback    func(cfg *Config) error
+	Callback    func(cfg *Config, param string) error
 }
 
 func GetCommandMap() map[string]CliCommand {
@@ -32,13 +32,18 @@ func GetCommandMap() map[string]CliCommand {
 		},
 		"map": {
 			Name:        "map",
-			Description: "Map the world",
+			Description: "Display the next 20 locations",
 			Callback:    commandMap,
 		},
 		"mapb": {
 			Name:        "mapb",
-			Description: "Map the world back",
+			Description: "Display the previous 20 locations",
 			Callback:    commandMapB,
+		},
+		"explore": {
+			Name:        "explore <areaname>",
+			Description: "Display the pokemon in this location",
+			Callback:    commandExplore,
 		},
 	}
 }

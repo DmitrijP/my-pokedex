@@ -7,7 +7,7 @@ import (
 	"github.com/DmitrijP/my-pokedex/internal/client"
 )
 
-func commandMapB(cfg *Config) error {
+func commandMapB(cfg *Config, param string) error {
 	cfg.Cache.ReapLoop()
 	if cfg.PreviousLocationsUrl == nil {
 		fmt.Printf("Error previous location not exists")

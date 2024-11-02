@@ -7,7 +7,7 @@ import (
 	"github.com/DmitrijP/my-pokedex/internal/client"
 )
 
-func commandMap(cfg *Config) error {
+func commandMap(cfg *Config, param string) error {
 	cfg.Cache.ReapLoop()
 	url := ""
 	if cfg.NextLocationsUrl != nil {

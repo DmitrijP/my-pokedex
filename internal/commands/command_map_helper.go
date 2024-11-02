@@ -26,10 +26,10 @@ func printLocations(locations client.LocationsResponse) {
 	}
 }
 
-func addToCache(cfg *Config, url string, locations client.LocationsResponse) {
+func addToCache(cfg *Config, url string, data any) {
 	_, exists := cfg.Cache.Get(url)
 	if !exists {
-		jsonBytes, err := json.Marshal(locations)
+		jsonBytes, err := json.Marshal(data)
 		if err != nil {
 			fmt.Printf("Error marshalling struct to JSON: %v", err)
 		} else {
