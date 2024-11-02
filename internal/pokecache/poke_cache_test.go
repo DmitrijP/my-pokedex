@@ -2,6 +2,8 @@ package pokecache
 
 import (
 	"bytes"
+	"fmt"
+	"sync"
 	"testing"
 	"time"
 )
@@ -194,5 +196,45 @@ func Test_ReapLoop_ValueAndCreatedAtExists(t *testing.T) {
 	}
 	if _, exists := sut.entries[expectedKey2]; exists {
 		t.Fatalf("Expected key '%v' to be deleted, but it was found\n", expectedKey2)
+	}
+}
+
+func Test_Add_ConcurrentAccess(t *testing.T) {
+
+}
+
+func Test_ReapLoop_ConcurrentAccess(t *testing.T) {
+	expectedDuration := time.Millisecond * 10
+	cache := NewCache(expectedDuration)
+
+	var wg sync.WaitGroup
+
+	numEntries := 100
+
+	for i := 0; i < numEntries; i++ {
+		wg.Add(1)
+		go func(i int) {
+			defer wg.Done()
+			time.Sleep(time.Millisecond)
+			cache.Add(fmt.Sprintf("key_%d", i), []byte("value"))
+		}(i)
+	}
+
+	time.Sleep(time.Millisecond * 20)
+	go func() {
+		for j := 0; j < 5; j++ {
+			cache.ReapLoop()
+			time.Sleep(time.Millisecond)
+		}
+	}()
+
+	wg.Wait()
+	time.Sleep(time.Millisecond * 20)
+
+	for key, value := range cache.entries {
+		newTime := value.createdAt.Add(cache.interval)
+		if newTime.Before(time.Now()) {
+			t.Fatalf("Expected key: %v to be removed but it was found\n", key)
+		}
 	}
 }
