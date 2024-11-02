@@ -2,11 +2,14 @@ package commands
 
 import (
 	"strings"
+
+	"github.com/DmitrijP/my-pokedex/internal/pokecache"
 )
 
 type Config struct {
 	PreviousLocationsUrl *string
 	NextLocationsUrl     *string
+	Cache                *pokecache.Cache
 }
 
 type CliCommand struct {
