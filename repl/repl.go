@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/DmitrijP/my-pokedex/commands"
+	"github.com/DmitrijP/my-pokedex/internal/commands"
 )
 
 func StartRepl(cfg *commands.Config) {

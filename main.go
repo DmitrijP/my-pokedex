@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/DmitrijP/my-pokedex/commands"
+	"github.com/DmitrijP/my-pokedex/internal/commands"
 	"github.com/DmitrijP/my-pokedex/repl"
 )
 

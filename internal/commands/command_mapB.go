@@ -3,7 +3,7 @@ package commands
 import (
 	"fmt"
 
-	"github.com/DmitrijP/my-pokedex/client"
+	"github.com/DmitrijP/my-pokedex/internal/client"
 )
 
 func commandMapB(cfg *Config) error {
