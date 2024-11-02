@@ -26,12 +26,13 @@ func commandExplore(cfg *Config, param string) error {
 	}
 	locations = client.RequestPokemonOfLocation(param)
 	addToCache(cfg, param, locations)
-	fmt.Println("Pokemon of the area: " + param)
 	printPokemon(locations)
 	return nil
 }
 
 func printPokemon(locations client.AreResponse) {
+	fmt.Printf("Exploring %s ...\n", locations.Name)
+	fmt.Println("Found Pokemon:")
 	for _, pokemon := range locations.PokemonEncounters {
 		fmt.Println(pokemon.Pokemon.Name)
 	}

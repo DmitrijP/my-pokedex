@@ -3,6 +3,7 @@ package commands
 import (
 	"strings"
 
+	"github.com/DmitrijP/my-pokedex/internal/client"
 	"github.com/DmitrijP/my-pokedex/internal/pokecache"
 )
 
@@ -10,8 +11,12 @@ type Config struct {
 	PreviousLocationsUrl *string
 	NextLocationsUrl     *string
 	Cache                *pokecache.Cache
+	Pokemon              *PokemonCage
 }
 
+type PokemonCage struct {
+	PokemonMap map[string]client.PokemonResponse
+}
 type CliCommand struct {
 	Name        string
 	Description string
@@ -44,6 +49,11 @@ func GetCommandMap() map[string]CliCommand {
 			Name:        "explore <areaname>",
 			Description: "Display the pokemon in this location",
 			Callback:    commandExplore,
+		},
+		"catch": {
+			Name:        "catch <pokemon>",
+			Description: "Try to catch the pokemon in this location",
+			Callback:    commandCatchPokemon,
 		},
 	}
 }
